@@ -4,6 +4,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
@@ -18,7 +19,10 @@ class ChatRoom(roomName: String, msgPerUser: Int, throwException: Boolean, paren
             println("ChatRoom $roomName ended")
         }
 
-        val outputChannel = Channel<ChatMessage>()
+        val outputChannel = actor<ChatMessage> {
+            for(message in channel)
+                println("${message.from}@$roomName> ${message.body}")
+        }
 
         val u1 = ChatUser("user1", msgPerUser, throwException, outputChannel, job)
         val u2 = ChatUser("user2", msgPerUser, throwException, outputChannel, job)
@@ -26,10 +30,6 @@ class ChatRoom(roomName: String, msgPerUser: Int, throwException: Boolean, paren
             u1.join()
             u2.join()
             job.cancel()
-        }
-        launch {
-            for(message in outputChannel)
-                println("${message.from}@$roomName> ${message.body}")
         }
     }
 
