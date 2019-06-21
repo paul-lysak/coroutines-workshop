@@ -9,15 +9,19 @@ import kotlinx.coroutines.runBlocking
 import java.util.concurrent.atomic.AtomicInteger
 
 
+suspend fun produceMessages(counter: AtomicInteger) {
+    for (messageI in 0 until 5) {
+        counter.incrementAndGet()
+        delay(1000)
+    }
+}
+
 fun main(args: Array<String>) {
     val messagesCount = AtomicInteger(0)
     runBlocking {
-        for(coroutineI in 0 until 100_000) {
+        for (coroutineI in 0 until 100_000) {
             launch {
-                for(messageI in 0 until 5) {
-                    messagesCount.incrementAndGet()
-                    delay(1000)
-                }
+                produceMessages(messagesCount)
             }
         }
     }
