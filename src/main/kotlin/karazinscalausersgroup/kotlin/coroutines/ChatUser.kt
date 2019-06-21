@@ -1,12 +1,13 @@
 package karazinscalausersgroup.kotlin.coroutines
 
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.SendChannel
 import java.lang.RuntimeException
 import kotlin.coroutines.CoroutineContext
 import kotlin.random.Random
 
 
-class ChatUser(val userName: String, maxMessages: Int, throwException: Boolean, parent: Job) : CoroutineScope {
+class ChatUser(val userName: String, maxMessages: Int, throwException: Boolean, outputChannel: SendChannel<ChatMessage>, parent: Job) : CoroutineScope {
     private val job = Job(parent)
 
     override val coroutineContext: CoroutineContext = Dispatchers.Default + job
@@ -18,7 +19,7 @@ class ChatUser(val userName: String, maxMessages: Int, throwException: Boolean, 
 
         launch {
             for (messageI in 0 until maxMessages) {
-                println("$userName> ${randomMessage()} - msg $messageI")
+                outputChannel.send(ChatMessage(userName, randomMessage()))
                 delay(1000)
             }
             if (throwException)
