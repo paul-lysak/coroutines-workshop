@@ -7,23 +7,22 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.concurrent.atomic.AtomicInteger
+import kotlin.random.Random
 
+val messages = listOf("Hello", "bye", "how are you", "wonderful", "no worries")
 
-suspend fun produceMessages(counter: AtomicInteger) {
-    for (messageI in 0 until 5) {
-        counter.incrementAndGet()
+fun randomMessage() = messages.get(Random.nextInt(messages.size))
+
+suspend fun createChatUser(name: String, maxMessages: Int) {
+    for (messageI in 0 until maxMessages) {
+        println("$name> ${randomMessage()}")
         delay(1000)
     }
 }
 
 fun main(args: Array<String>) {
-    val messagesCount = AtomicInteger(0)
     runBlocking {
-        for (coroutineI in 0 until 100_000) {
-            launch {
-                produceMessages(messagesCount)
-            }
-        }
+        createChatUser("user1", 10)
+        createChatUser("user2", 10)
     }
-    println("Messages count: $messagesCount")
 }
