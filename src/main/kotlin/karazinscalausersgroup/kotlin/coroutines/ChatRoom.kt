@@ -7,8 +7,8 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
 
-class ChatRoom(roomName: String) : CoroutineScope {
-    private val job = Job()
+class ChatRoom(roomName: String, parent: Job) : CoroutineScope {
+    private val job = Job(parent)
 
     override val coroutineContext: CoroutineContext = Dispatchers.Default + job
 
@@ -18,8 +18,8 @@ class ChatRoom(roomName: String) : CoroutineScope {
         }
 
         launch {
-            ChatUser("${roomName}_user1", 5)
-            ChatUser("${roomName}_user2", 5)
+            ChatUser("${roomName}_user1", 5, job)
+            ChatUser("${roomName}_user2", 5, job)
         }
     }
 

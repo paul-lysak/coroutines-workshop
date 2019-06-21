@@ -1,12 +1,13 @@
 package karazinscalausersgroup.kotlin.coroutines
 
 import kotlinx.coroutines.*
+import java.lang.RuntimeException
 import kotlin.coroutines.CoroutineContext
 import kotlin.random.Random
 
 
-class ChatUser(val userName: String, maxMessages: Int) : CoroutineScope {
-    private val job = Job()
+class ChatUser(val userName: String, maxMessages: Int, parent: Job) : CoroutineScope {
+    private val job = Job(parent)
 
     override val coroutineContext: CoroutineContext = Dispatchers.Default + job
 
@@ -20,7 +21,7 @@ class ChatUser(val userName: String, maxMessages: Int) : CoroutineScope {
                 println("$userName> ${randomMessage()} - msg $messageI")
                 delay(1000)
             }
-            job.cancel()
+            throw RuntimeException("User $userName disconnected")
         }
     }
 
