@@ -7,20 +7,26 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.random.Random
 
 val messages = listOf("Hello", "bye", "how are you", "wonderful", "no worries")
 
+val outputMutex = Mutex()
+
 fun randomMessage() = messages.get(Random.nextInt(messages.size))
 
 suspend fun createChatUser(name: String, maxMessages: Int) {
     for (messageI in 0 until maxMessages) {
-        println("$name (1)> ${randomMessage()}")
-        delay(10)
-        println("$name (2)> ${randomMessage()}")
-        delay(10)
-        println("$name (3)> ${randomMessage()}")
+        outputMutex.withLock {
+            println("$name (1)> ${randomMessage()}")
+            delay(10)
+            println("$name (2)> ${randomMessage()}")
+            delay(10)
+            println("$name (3)> ${randomMessage()}")
+        }
         delay(1000)
     }
 }
