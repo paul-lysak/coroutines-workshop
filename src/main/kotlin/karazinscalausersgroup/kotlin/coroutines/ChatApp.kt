@@ -17,8 +17,14 @@ class ChatApp: CoroutineScope {
             println("ChatApp ended")
         }
 
-        ChatRoom("room1", 5, true, job)
-        ChatRoom("room2", 10, false, job)
+        val r1 = ChatRoom("room1", 5, true, job)
+        val r2 = ChatRoom("room2", 10, false, job)
+
+        launch {
+            r1.join()
+            r2.join()
+            job.cancel()
+        }
     }
 
     suspend fun join() {

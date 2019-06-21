@@ -17,10 +17,17 @@ class ChatRoom(roomName: String, msgPerUser: Int, throwException: Boolean, paren
             println("ChatRoom $roomName ended")
         }
 
+        val u1 = ChatUser("${roomName}_user1", msgPerUser, throwException, job)
+        val u2 = ChatUser("${roomName}_user2", msgPerUser, throwException, job)
         launch {
-            ChatUser("${roomName}_user1", msgPerUser, throwException, job)
-            ChatUser("${roomName}_user2", msgPerUser, throwException, job)
+            u1.join()
+            u2.join()
+            job.cancel()
         }
+    }
+
+    suspend fun join() {
+        job.join()
     }
 
 }

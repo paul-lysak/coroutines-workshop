@@ -21,11 +21,15 @@ class ChatUser(val userName: String, maxMessages: Int, throwException: Boolean, 
                 println("$userName> ${randomMessage()} - msg $messageI")
                 delay(1000)
             }
-            if(throwException)
+            if (throwException)
                 throw RuntimeException("User $userName disconnected")
             else
                 job.cancel()
         }
+    }
+
+    suspend fun join() {
+        job.join()
     }
 
 
