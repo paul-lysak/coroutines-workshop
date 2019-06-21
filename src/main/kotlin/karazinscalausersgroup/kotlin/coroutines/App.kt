@@ -3,13 +3,14 @@
  */
 package karazinscalausersgroup.kotlin.coroutines
 
-class App {
-    val greeting: String
-        get() {
-            return "Hello world."
-        }
-}
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
+
 
 fun main(args: Array<String>) {
-    println(App().greeting)
+    runBlocking {
+        println("Hello,")
+        delay(1000)
+        println("world")
+    }
 }
