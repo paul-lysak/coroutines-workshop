@@ -3,6 +3,7 @@
  */
 package karazinscalausersgroup.kotlin.coroutines
 
+import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -22,7 +23,7 @@ suspend fun createChatUser(name: String, maxMessages: Int) {
 
 fun main(args: Array<String>) {
     runBlocking {
-        createChatUser("user1", 10)
-        createChatUser("user2", 10)
+        async { createChatUser("user1", 10) }
+        async { createChatUser("user2", 10) }
     }
 }
