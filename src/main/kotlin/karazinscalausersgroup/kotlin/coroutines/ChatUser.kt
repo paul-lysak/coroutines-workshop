@@ -6,7 +6,7 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.random.Random
 
 
-class ChatUser(val userName: String, maxMessages: Int, parent: Job) : CoroutineScope {
+class ChatUser(val userName: String, maxMessages: Int, throwException: Boolean, parent: Job) : CoroutineScope {
     private val job = Job(parent)
 
     override val coroutineContext: CoroutineContext = Dispatchers.Default + job
@@ -21,7 +21,10 @@ class ChatUser(val userName: String, maxMessages: Int, parent: Job) : CoroutineS
                 println("$userName> ${randomMessage()} - msg $messageI")
                 delay(1000)
             }
-            throw RuntimeException("User $userName disconnected")
+            if(throwException)
+                throw RuntimeException("User $userName disconnected")
+            else
+                job.cancel()
         }
     }
 
