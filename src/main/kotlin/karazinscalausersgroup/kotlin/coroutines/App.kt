@@ -4,13 +4,22 @@
 package karazinscalausersgroup.kotlin.coroutines
 
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.util.concurrent.atomic.AtomicInteger
 
 
 fun main(args: Array<String>) {
+    val messagesCount = AtomicInteger(0)
     runBlocking {
-        println("Hello,")
-        delay(1000)
-        println("world")
+        for(coroutineI in 0 until 100_000) {
+            launch {
+                for(messageI in 0 until 5) {
+                    messagesCount.incrementAndGet()
+                    delay(1000)
+                }
+            }
+        }
     }
+    println("Messages count: $messagesCount")
 }
