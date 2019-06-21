@@ -33,7 +33,11 @@ suspend fun createChatUser(name: String, maxMessages: Int) {
 
 fun main(args: Array<String>) {
     runBlocking {
-        async { createChatUser("user1", 10) }
-        async { createChatUser("user2", 10) }
+        val chatRoomJob = launch {
+            async { createChatUser("user1", 10) }
+            async { createChatUser("user2", 10) }
+        }
+        delay(2000)
+        chatRoomJob.cancel()
     }
 }
