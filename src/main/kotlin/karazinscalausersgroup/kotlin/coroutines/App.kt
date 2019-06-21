@@ -16,7 +16,11 @@ fun randomMessage() = messages.get(Random.nextInt(messages.size))
 
 suspend fun createChatUser(name: String, maxMessages: Int) {
     for (messageI in 0 until maxMessages) {
-        println("$name> ${randomMessage()}")
+        println("$name (1)> ${randomMessage()}")
+        delay(10)
+        println("$name (2)> ${randomMessage()}")
+        delay(10)
+        println("$name (3)> ${randomMessage()}")
         delay(1000)
     }
 }
